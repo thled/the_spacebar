@@ -13,9 +13,9 @@ This is me coding along the [Symfony 4 tutorial from Symfonycasts](https://symfo
 1. Clone this repository: `git clone git@github.com:thled/the_spacebar.git`
 1. Change to project directory: `cd the_spacebar`
 1. Install dependencies: `composer install`
-1. Run the dev server: `bin/console server:run`
 
 ## Run
 
+1. Run the dev server: `bin/console server:run`
 1. Open the website on `localhost:8000`.
 
