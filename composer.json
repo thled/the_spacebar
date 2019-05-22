@@ -15,7 +15,8 @@
         "symfony/yaml": "4.2.*"
     },
     "require-dev": {
-        "sensiolabs/security-checker": "^5.0"
+        "sensiolabs/security-checker": "^5.0",
+        "symfony/profiler-pack": "^1.0"
     },
     "config": {
         "preferred-install": {
