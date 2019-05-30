@@ -2,14 +2,11 @@
 
 namespace App\Controller;
 
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Service\SlackClient;
 use Psr\Log\LoggerInterface;
-use Michelf\MarkdownInterface;
-use Symfony\Component\Cache\Adapter\AdapterInterface;
 use App\Service\MarkdownHelper;
-use Nexy\Slack\Client;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ArticleController extends AbstractController
 {
@@ -24,15 +21,10 @@ class ArticleController extends AbstractController
     /**
      * @Route("/news/{slug}", name="article_show")
      */
-    public function show($slug, MarkdownHelper $markdownHelper, Client $slack)
+    public function show($slug, MarkdownHelper $markdownHelper, SlackClient $slack)
     {
         if ($slug === 'khaaan') {
-            $message = $slack->createMessage()
-                ->from('Khan')
-                ->withIcon(':ghost:')
-                ->setText('Ah, Kirk, my old friend...');
-
-            $slack->sendMessage($message);
+            $slack->sendMessage('Khaan', 'Hi there! I\'m calling from a Service!');
         }
 
         $comments = [
