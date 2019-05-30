@@ -9,6 +9,7 @@ use Psr\Log\LoggerInterface;
 use Michelf\MarkdownInterface;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 use App\Service\MarkdownHelper;
+use Nexy\Slack\Client;
 
 class ArticleController extends AbstractController
 {
@@ -23,8 +24,17 @@ class ArticleController extends AbstractController
     /**
      * @Route("/news/{slug}", name="article_show")
      */
-    public function show($slug, MarkdownHelper $markdownHelper)
+    public function show($slug, MarkdownHelper $markdownHelper, Client $slack)
     {
+        if ($slug === 'khaaan') {
+            $message = $slack->createMessage()
+                ->from('Khan')
+                ->withIcon(':ghost:')
+                ->setText('Ah, Kirk, my old friend...');
+
+            $slack->sendMessage($message);
+        }
+
         $comments = [
             'I ate a normal rock once. It did NOT taste like bacon!',
             'Woohoo! I\'m going on an all-asteroid diet!',
