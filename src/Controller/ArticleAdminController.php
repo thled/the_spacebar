@@ -51,6 +51,10 @@ class ArticleAdminController extends AbstractController
             $article->setPublishedAt(new \DateTime(sprintf('-%d days', rand(1, 100))));
         }
 
+        $article->setAuthor('Mike Ferengi')
+            ->setHeartCount(rand(5, 100))
+            ->setImage('asteroid.jpeg');
+
         $em->persist($article);
         $em->flush();
 
