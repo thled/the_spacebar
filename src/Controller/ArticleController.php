@@ -9,15 +9,20 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Article;
+use App\Repository\ArticleRepository;
 
 class ArticleController extends AbstractController
 {
     /**
      * @Route("/", name="app_homepage")
      */
-    public function homepage()
+    public function homepage(ArticleRepository $repository)
     {
-        return $this->render('article/homepage.html.twig');
+        $articles = $repository->findAllPublishedOrderedByNewest();
+
+        return $this->render('article/homepage.html.twig', [
+            'articles' => $articles,
+        ]);
     }
 
     /**
@@ -32,7 +37,7 @@ class ArticleController extends AbstractController
         $repository = $em->getRepository(Article::class);
         /** @var Article $article */
         $article = $repository->findOneBy(['slug' => $slug]);
-        if(!$article) {
+        if (!$article) {
             throw $this->createNotFoundException(sprintf('No article for slug "%s"', $slug));
         }
 
