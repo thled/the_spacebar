@@ -14,7 +14,7 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
 class Article
 {
     use TimestampableEntity;
-    
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -59,7 +59,8 @@ class Article
     private $image;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="article")
+     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="article", fetch="EXTRA_LAZY")
+     * @ORM\OrderBy({"createdAt" = "DESC"})
      */
     private $comments;
 
