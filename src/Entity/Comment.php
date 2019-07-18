@@ -11,7 +11,7 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
 class Comment
 {
     use TimestampableEntity;
-    
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -34,6 +34,11 @@ class Comment
      * @ORM\JoinColumn(nullable=false)
      */
     private $article;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isDeleted = false;
 
     public function getId(): ?int
     {
@@ -72,6 +77,18 @@ class Comment
     public function setArticle(?Article $article): self
     {
         $this->article = $article;
+
+        return $this;
+    }
+
+    public function getIsDeleted(): ?bool
+    {
+        return $this->isDeleted;
+    }
+
+    public function setIsDeleted(bool $isDeleted): self
+    {
+        $this->isDeleted = $isDeleted;
 
         return $this;
     }
