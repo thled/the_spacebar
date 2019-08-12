@@ -3,10 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\Article;
-use Doctrine\ORM\QueryBuilder;
-use Doctrine\Common\Collections\Criteria;
-use Symfony\Bridge\Doctrine\RegistryInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
+use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
  * @method Article|null find($id, $lockMode = null, $lockVersion = null)
@@ -41,13 +40,6 @@ class ArticleRepository extends ServiceEntityRepository
     private function getOrCreateQueryBuilder($qb = null)
     {
         return $qb ?? $this->createQueryBuilder('a');
-    }
-
-    public static function createNonDeletedCriteria(): Criteria
-    {
-        return Criteria::create()
-            ->andWhere(Criteria::expr()->eq('isDeleted', false))
-            ->orderBy(['createdAt' => 'DESC']);
     }
 
     /*
