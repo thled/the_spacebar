@@ -10,7 +10,7 @@ html {height:100%}
 /* NAVIGATION */
 
 .navbar-bg {
-    background: url('../images/space-nav.png');
+    background: url('../images/space-nav.jpg');
     background-size: 80%;
 }
 
@@ -172,7 +172,7 @@ html {height:100%}
 
 .show-article-container.show-article-container-border-green {
     border-top: 3px solid green;
-    border-radius: 5px;
+    border-radius: 3px;
 }
 
 .show-article-img {
@@ -208,6 +208,10 @@ html {height:100%}
     font-size: 1.5em;
 }
 
+.comment-container {
+    max-width: 600px;
+}
+
 .comment-img {
     width: 50px;
     height: auto;
@@ -225,6 +229,9 @@ html {height:100%}
 @media (max-width: 767px) {
     .comment-form {
         min-width: 260px;
+    }
+    .comment-container {
+        max-width: 280px;
     }
 }
 

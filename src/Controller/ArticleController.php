@@ -2,18 +2,27 @@
 
 namespace App\Controller;
 
-use App\Service\SlackClient;
-use Psr\Log\LoggerInterface;
-use App\Service\MarkdownHelper;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Article;
 use App\Repository\ArticleRepository;
-use App\Repository\CommentRepository;
+use App\Service\SlackClient;
+use Doctrine\ORM\EntityManagerInterface;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class ArticleController extends AbstractController
 {
+    /**
+     * Currently unused: just showing a controller with a constructor!
+     */
+    private $isDebug;
+
+    public function __construct(bool $isDebug)
+    {
+        $this->isDebug = $isDebug;
+    }
+
     /**
      * @Route("/", name="app_homepage")
      */
@@ -31,31 +40,25 @@ class ArticleController extends AbstractController
      */
     public function show(Article $article, SlackClient $slack)
     {
-        if ($article->getSlug() === 'khaaan') {
-            $slack->sendMessage('Khaan', 'Hi there! I\'m calling from a Service!');
+        if ($article->getSlug() === 'khaaaaaan') {
+            $slack->sendMessage('Kahn', 'Ah, Kirk, my old friend...');
         }
 
-        return $this->render(
-            'article/show.html.twig',
-            [
-                'article' => $article,
-            ]
-        );
+        return $this->render('article/show.html.twig', [
+            'article' => $article,
+        ]);
     }
 
     /**
      * @Route("/news/{slug}/heart", name="article_toggle_heart", methods={"POST"})
      */
-    public function toggleArticleHeart(
-        Article $article,
-        LoggerInterface $logger,
-        EntityManagerInterface $em
-    ) {
+    public function toggleArticleHeart(Article $article, LoggerInterface $logger, EntityManagerInterface $em)
+    {
         $article->incrementHeartCount();
         $em->flush();
 
-        $logger->info('Article is being hearted');
+        $logger->info('Article is being hearted!');
 
-        return $this->json(['hearts' => $article->getHeartCount()]);
+        return new JsonResponse(['hearts' => $article->getHeartCount()]);
     }
 }

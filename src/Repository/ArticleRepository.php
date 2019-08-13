@@ -26,20 +26,12 @@ class ArticleRepository extends ServiceEntityRepository
     public function findAllPublishedOrderedByNewest()
     {
         return $this->addIsPublishedQueryBuilder()
+            ->leftJoin('a.tags', 't')
+            ->addSelect('t')
             ->orderBy('a.publishedAt', 'DESC')
             ->getQuery()
-            ->getResult();
-    }
-
-    private function addIsPublishedQueryBuilder(QueryBuilder $qb = null)
-    {
-        return $this->getOrCreateQueryBuilder($qb)
-            ->andWhere('a.publishedAt IS NOT NULL');
-    }
-
-    private function getOrCreateQueryBuilder($qb = null)
-    {
-        return $qb ?? $this->createQueryBuilder('a');
+            ->getResult()
+        ;
     }
 
     /*
@@ -53,4 +45,15 @@ class ArticleRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    private function addIsPublishedQueryBuilder(QueryBuilder $qb = null)
+    {
+        return $this->getOrCreateQueryBuilder($qb)
+            ->andWhere('a.publishedAt IS NOT NULL');
+    }
+
+    private function getOrCreateQueryBuilder(QueryBuilder $qb = null)
+    {
+        return $qb ?: $this->createQueryBuilder('a');
+    }
 }

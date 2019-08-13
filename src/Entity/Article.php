@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\CommentRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
@@ -57,7 +58,7 @@ class Article
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $image;
+    private $imageFilename;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="article", fetch="EXTRA_LAZY")
@@ -76,7 +77,7 @@ class Article
         $this->tags = new ArrayCollection();
     }
 
-    public function getId(): ?int
+    public function getId()
     {
         return $this->id;
     }
@@ -92,6 +93,7 @@ class Article
 
         return $this;
     }
+
 
     public function getSlug(): ?string
     {
@@ -153,28 +155,28 @@ class Article
         return $this;
     }
 
-    public function getImage(): ?string
-    {
-        return $this->image;
-    }
-
-    public function setImage(?string $image): self
-    {
-        $this->image = $image;
-
-        return $this;
-    }
-
-    public function getImagePath(): string
-    {
-        return 'images/' . $this->getImage();
-    }
-
     public function incrementHeartCount(): self
     {
-        $this->heartCount++;
+        $this->heartCount = $this->heartCount + 1;
 
         return $this;
+    }
+
+    public function getImageFilename(): ?string
+    {
+        return $this->imageFilename;
+    }
+
+    public function setImageFilename(?string $imageFilename): self
+    {
+        $this->imageFilename = $imageFilename;
+
+        return $this;
+    }
+
+    public function getImagePath()
+    {
+        return 'images/'.$this->getImageFilename();
     }
 
     /**
