@@ -135,7 +135,7 @@ class User implements UserInterface
         // $this->plainPassword = null;
     }
 
-    public function getFirstName(): ?string
+    public function getFirstName(): string
     {
         return $this->firstName;
     }
@@ -237,5 +237,10 @@ class User implements UserInterface
         }
 
         return $this;
+    }
+
+    public function __toString(): string
+    {
+        return $this->getFirstName();
     }
 }
