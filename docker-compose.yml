@@ -1,0 +1,25 @@
+version: '3.7'
+services:
+    db:
+        image: mysql:8.0.17
+        command: mysqld --default-authentication-plugin=mysql_native_password
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+            MYSQL_DATABASE: ${MYSQL_DATABASE}
+    php:
+        build:
+            context: .
+            dockerfile: docker/php/Dockerfile
+        restart: always
+        env_file:
+            - .env
+        user: ${LOCAL_USER}
+    nginx:
+        image: nginx:1.15.3-alpine
+        restart: always
+        depends_on:
+            - php
+    adminer:
+        image: adminer:4.7.2
+        restart: always
