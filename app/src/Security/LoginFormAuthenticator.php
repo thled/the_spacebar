@@ -21,21 +21,12 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
 {
     use TargetPathTrait;
 
-    /** @var UserRepository */
     private $userRepository;
-    /** @var RouterInterface */
     private $router;
-    /** @var CsrfTokenManagerInterface */
     private $csrfTokenManager;
-    /** @var UserPasswordEncoderInterface */
     private $passwordEncoder;
 
-    public function __construct(
-        UserRepository $userRepository,
-        RouterInterface $router,
-        CsrfTokenManagerInterface $csrfTokenManager,
-        UserPasswordEncoderInterface $passwordEncoder
-    )
+    public function __construct(UserRepository $userRepository, RouterInterface $router, CsrfTokenManagerInterface $csrfTokenManager, UserPasswordEncoderInterface $passwordEncoder)
     {
         $this->userRepository = $userRepository;
         $this->router = $router;
@@ -43,13 +34,9 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
         $this->passwordEncoder = $passwordEncoder;
     }
 
-    protected function getLoginUrl(): string
+    public function supports(Request $request)
     {
-        return $this->router->generate('app_login');
-    }
-
-    public function supports(Request $request): bool
-    {
+        // do your work when we're POSTing to the login page
         return $request->attributes->get('_route') === 'app_login'
             && $request->isMethod('POST');
     }
@@ -57,8 +44,8 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
     public function getCredentials(Request $request)
     {
         $credentials = [
-            'email'      => $request->request->get('email'),
-            'password'   => $request->request->get('password'),
+            'email' => $request->request->get('email'),
+            'password' => $request->request->get('password'),
             'csrf_token' => $request->request->get('_csrf_token'),
         ];
 
@@ -76,10 +63,11 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
         if (!$this->csrfTokenManager->isTokenValid($token)) {
             throw new InvalidCsrfTokenException();
         }
+
         return $this->userRepository->findOneBy(['email' => $credentials['email']]);
     }
 
-    public function checkCredentials($credentials, UserInterface $user): bool
+    public function checkCredentials($credentials, UserInterface $user)
     {
         return $this->passwordEncoder->isPasswordValid($user, $credentials['password']);
     }
@@ -91,5 +79,10 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
         }
 
         return new RedirectResponse($this->router->generate('app_homepage'));
+    }
+
+    protected function getLoginUrl()
+    {
+        return $this->router->generate('app_login');
     }
 }

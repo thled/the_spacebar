@@ -14,7 +14,6 @@ use Symfony\Component\Security\Guard\AbstractGuardAuthenticator;
 
 class ApiTokenAuthenticator extends AbstractGuardAuthenticator
 {
-    /** @var ApiTokenRepository */
     private $apiTokenRepo;
 
     public function __construct(ApiTokenRepository $apiTokenRepo)
@@ -22,8 +21,9 @@ class ApiTokenAuthenticator extends AbstractGuardAuthenticator
         $this->apiTokenRepo = $apiTokenRepo;
     }
 
-    public function supports(Request $request): bool
+    public function supports(Request $request)
     {
+        // look for header "Authorization: Bearer <token>"
         return $request->headers->has('Authorization')
             && 0 === strpos($request->headers->get('Authorization'), 'Bearer ');
     }
@@ -39,21 +39,25 @@ class ApiTokenAuthenticator extends AbstractGuardAuthenticator
     public function getUser($credentials, UserProviderInterface $userProvider)
     {
         $token = $this->apiTokenRepo->findOneBy([
-            'token' => $credentials,
+            'token' => $credentials
         ]);
 
         if (!$token) {
-            throw new CustomUserMessageAuthenticationException('Invalid API Token');
+            throw new CustomUserMessageAuthenticationException(
+                'Invalid API Token'
+            );
         }
 
         if ($token->isExpired()) {
-            throw new CustomUserMessageAuthenticationException('API Token is expired');
+            throw new CustomUserMessageAuthenticationException(
+                'Token expired'
+            );
         }
 
         return $token->getUser();
     }
 
-    public function checkCredentials($credentials, UserInterface $user): bool
+    public function checkCredentials($credentials, UserInterface $user)
     {
         return true;
     }
@@ -72,10 +76,10 @@ class ApiTokenAuthenticator extends AbstractGuardAuthenticator
 
     public function start(Request $request, AuthenticationException $authException = null)
     {
-        throw new \LogicException('Should not be reached! entry_point from other authenticator is used');
+        throw new \Exception('Not used: entry_point from other authentication is used');
     }
 
-    public function supportsRememberMe(): bool
+    public function supportsRememberMe()
     {
         return false;
     }

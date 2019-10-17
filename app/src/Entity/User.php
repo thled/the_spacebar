@@ -123,7 +123,7 @@ class User implements UserInterface
      */
     public function getSalt()
     {
-        // not needed for apps that do not check user passwords
+        // not needed when using bcrypt or argon
     }
 
     /**
@@ -135,7 +135,7 @@ class User implements UserInterface
         // $this->plainPassword = null;
     }
 
-    public function getFirstName(): string
+    public function getFirstName(): ?string
     {
         return $this->firstName;
     }
@@ -168,10 +168,10 @@ class User implements UserInterface
 
     public function getAvatarUrl(int $size = null): string
     {
-        $url = 'https://robohash.org/' . $this->getEmail();
+        $url = 'https://robohash.org/'.$this->getEmail();
 
         if ($size) {
-            $url .= sprintf('?size=%1$dx%1$d', $size);
+            $url .= sprintf('?size=%dx%d', $size, $size);
         }
 
         return $url;
@@ -239,7 +239,7 @@ class User implements UserInterface
         return $this;
     }
 
-    public function __toString(): string
+    public function __toString()
     {
         return $this->getFirstName();
     }

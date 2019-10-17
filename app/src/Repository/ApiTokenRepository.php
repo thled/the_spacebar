@@ -19,9 +19,9 @@ class ApiTokenRepository extends ServiceEntityRepository
         parent::__construct($registry, ApiToken::class);
     }
 
-    // /**
-    //  * @return ApiToken[] Returns an array of ApiToken objects
-    //  */
+//    /**
+//     * @return ApiToken[] Returns an array of ApiToken objects
+//     */
     /*
     public function findByExampleField($value)
     {
