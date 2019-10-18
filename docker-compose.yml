@@ -14,7 +14,7 @@ services:
         restart: always
         env_file:
             - .env
-        user: ${LOCAL_USER}
+              #        user: ${LOCAL_USER}
     nginx:
         image: nginx:1.15.3-alpine
         restart: always
