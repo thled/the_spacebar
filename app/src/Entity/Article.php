@@ -257,7 +257,7 @@ class Article
     /**
      * @Assert\Callback
      */
-    public function validate(ExecutionContextInterface $context, $payload): bool
+    public function validate(ExecutionContextInterface $context, $payload): void
     {
         if (stripos($this->getTitle(), 'the borg') !== false) {
             $context->buildViolation('No borg!')
