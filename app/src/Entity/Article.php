@@ -5,10 +5,11 @@ namespace App\Entity;
 use App\Repository\CommentRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ArticleRepository")
@@ -26,6 +27,7 @@ class Article
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="Insert a title!")
      */
     private $title;
 
@@ -132,7 +134,8 @@ class Article
         return $this;
     }
 
-    public function isPublished(): bool {
+    public function isPublished(): bool
+    {
         return $this->publishedAt !== null;
     }
 
@@ -169,7 +172,7 @@ class Article
 
     public function getImagePath()
     {
-        return 'images/'.$this->getImageFilename();
+        return 'images/' . $this->getImageFilename();
     }
 
     /**
@@ -249,5 +252,17 @@ class Article
         $this->author = $author;
 
         return $this;
+    }
+
+    /**
+     * @Assert\Callback
+     */
+    public function validate(ExecutionContextInterface $context, $payload): bool
+    {
+        if (stripos($this->getTitle(), 'the borg') !== false) {
+            $context->buildViolation('No borg!')
+                ->atPath('title')
+                ->addViolation();
+        }
     }
 }
