@@ -40,15 +40,7 @@ class ArticleFormType extends AbstractType
                 ])
             ->add(
                 'author',
-                EntityType::class,
-                [
-                    'class' => User::class,
-                    'choice_label' => function (User $user) {
-                        return sprintf('(%d) %s', $user->getId(), $user->getEmail());
-                    },
-                    'placeholder' => 'Choose an author',
-                    'choices' => $this->userRepo->findAllEmailAlphabetical(),
-                ]
+                UserSelectTextType::class
             );
     }
 
