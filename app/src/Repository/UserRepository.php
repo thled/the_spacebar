@@ -30,6 +30,19 @@ class UserRepository extends ServiceEntityRepository
             ->execute();
     }
 
+    /**
+     * @return User[]
+     */
+    public function findAllMatching(string $query, int $limit = 5): array
+    {
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.email LIKE :query')
+            ->setParameter('query', '%' . $query . '%')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
+
 //    /**
 //     * @return User[] Returns an array of User objects
 //     */
@@ -46,7 +59,6 @@ class UserRepository extends ServiceEntityRepository
         ;
     }
     */
-
     /*
     public function findOneBySomeField($value): ?User
     {
