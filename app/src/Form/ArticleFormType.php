@@ -33,7 +33,9 @@ class ArticleFormType extends AbstractType
                     'help' => 'Choose something catchy!',
                 ]
             )
-            ->add('content')
+            ->add('content', null, [
+                'rows' => 15,
+            ])
             ->add(
                 'publishedAt',
                 null,
