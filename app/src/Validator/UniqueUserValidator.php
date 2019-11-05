@@ -28,7 +28,7 @@ class UniqueUserValidator extends ConstraintValidator
         if (!$existingUser instanceof User) {
             return;
         }
-        
+
         $this->context->buildViolation($constraint->message)
             ->addViolation();
     }
