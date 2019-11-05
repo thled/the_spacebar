@@ -25,6 +25,7 @@ class ArticleFormType extends AbstractType
         /** @var Article|null $article */
         $article = $options['data'] ?? null;
         $isEdit = $article && $article->getId();
+        $location = $article ? $article->getLocation() : null;
 
         $builder
             ->add(
@@ -56,18 +57,19 @@ class ArticleFormType extends AbstractType
                     ],
                     'required' => false,
                 ]
-            )
-            ->add(
+            );
+
+        if ($location) {
+            $builder->add(
                 'specificLocationName',
                 ChoiceType::class,
                 [
                     'placeholder' => 'Where exactly?',
-                    'choices' => [
-                        'TODO' => 'TODO',
-                    ],
+                    'choices' => $this->getLocationNameChoices($location),
                     'required' => false,
                 ]
             );
+        }
 
         if ($options['include_published_at']) {
             $builder->add(
@@ -85,5 +87,37 @@ class ArticleFormType extends AbstractType
             'data_class' => Article::class,
             'include_published_at' => false,
         ]);
+    }
+
+    private function getLocationNameChoices(string $location): array
+    {
+        $planets = [
+            'Mercury',
+            'Venus',
+            'Earth',
+            'Mars',
+            'Jupiter',
+            'Saturn',
+            'Uranus',
+            'Neptune',
+        ];
+
+        $stars = [
+            'Polaris',
+            'Sirius',
+            'Alpha Centauari A',
+            'Alpha Centauari B',
+            'Betelgeuse',
+            'Rigel',
+            'Other',
+        ];
+
+        $locationNameChoices = [
+            'solar_system' => array_combine($planets, $planets),
+            'star' => array_combine($stars, $stars),
+            'interstellar_space' => null,
+        ];
+
+        return $locationNameChoices[$location];
     }
 }
